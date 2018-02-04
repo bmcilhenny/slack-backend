@@ -2,7 +2,7 @@ class Api::V1::AuthController < ApplicationController
  skip_before_action :authorized, only: [:create, :show]
  def create
     user = User.find_by(username: params[:username])
-    byebug
+    # byebug
    if user && user.authenticate(params[:password])
       # issue that user a token
       token = issue_token(user)

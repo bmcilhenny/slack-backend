@@ -9,7 +9,7 @@ class Api::V1::UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    render json: @user, include: ['channels', 'channels.messages', 'channels.messages.user']
+    render json: @user, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user']
   end
 
   def update

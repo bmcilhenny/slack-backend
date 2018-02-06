@@ -1,19 +1,26 @@
 class Api::V1::MessagesController < ApplicationController
 
-  skip_before_action :authorized, only: [:show]
+  skip_before_action :authorized, only: [:index, :show, :create]
 
   def index
     @messages = Message.all
-    render json: @messages
+    render json: @messages, include: ['user', 'user.display_name', 'user.id']
   end
 
   def create
-    message = Message.new(content: params[:content], user_id: 3, channel_id: 2)
-    if message.save
-      ActionCable.broadcast('my_channel', message)
-      render json: message
+    @message = Message.new(content: params[:content], user_id: params[:user_id], channel_id: params[:channel_id])
+    if @message.save
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        MessageSerializer.new(@message)
+      ).serializable_hash
+      # byebug
+      # ChannelChannel.broadcast_to 'my_channel', serialized_data
+      ActionCable.server.broadcast('my_channel', serialized_data)
+      head :ok
+      # render json: @message
     else
       render json: {error: 'Could not create that message'}, status: 422
+    end
   end
 
   def show

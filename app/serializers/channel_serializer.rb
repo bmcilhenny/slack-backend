@@ -1,8 +1,8 @@
 class ChannelSerializer < ActiveModel::Serializer
-  attributes :id, :name, :details, :messages
+  attributes :id, :name, :details
 
-  has_many :messages
-  has_many :users
-  belongs_to :owner
+  has_many :messages, serializer: ChannelMessageSerializer
+  # has_many :users
+  belongs_to :owner, serializer: OwnerSerializer
 
 end

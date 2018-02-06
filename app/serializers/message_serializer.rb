@@ -1,7 +1,7 @@
 class MessageSerializer < ActiveModel::Serializer
-  attributes :id, :content, :created_at, :user
+  attributes :id, :content, :created_at, :channel_id
 
-  belongs_to :user
-  belongs_to :channel
+  belongs_to :user, serializer: MessageUserSerializer
+
 
 end

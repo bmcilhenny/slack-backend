@@ -4,7 +4,7 @@ class Api::V1::UsersController < ApplicationController
 
   def index
     @users = User.all
-    render json: @users
+    render json: @users, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user']
   end
 
   def show

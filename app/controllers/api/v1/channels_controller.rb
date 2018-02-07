@@ -7,6 +7,21 @@ class Api::V1::ChannelsController < ApplicationController
     render json: @channels
   end
 
+  def create
+    @channel = Channel.new(content: params[:name], owner_id: params[:owner_id])
+    if @channel.save
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        ChannelSerializer.new(@channel)
+      ).serializable_hash
+
+      ActionCable.server.broadcast('my_channel', serialized_data)
+      head :ok
+      # render json: @channel
+    else
+      render json: {error: 'Could not create that channel'}, status: 422
+    end
+  end
+
   def show
     @channel = Channel.find(params[:id])
     render json: @channel

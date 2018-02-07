@@ -14,8 +14,10 @@ class Api::V1::MessagesController < ApplicationController
         MessageSerializer.new(@message)
       ).serializable_hash
 
-      ActionCable.server.broadcast('my_channel', serialized_data)
-      head :ok
+      ActionCable.server.broadcast('my_channel', {
+        type: 'NEW_MESSAGE',
+        payload: serialized_data
+      })
       # render json: @message
     else
       render json: {error: 'Could not create that message'}, status: 422

@@ -8,14 +8,22 @@ class Api::V1::ChannelsController < ApplicationController
   end
 
   def create
-    @channel = Channel.new(content: params[:name], owner_id: params[:owner_id])
+    @channel = Channel.new(content: params[:name], owner_id: params[:owner_id], params[:owner_id])
     if @channel.save
+      users = params[:users]
+      users.each do |u|
+        user = User.find(u)
+        user.channels << @channel
+      end
+
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
         ChannelSerializer.new(@channel)
       ).serializable_hash
 
-      ActionCable.server.broadcast('my_channel', serialized_data)
-      head :ok
+      ActionCable.server.broadcast('my_channel', {
+        type: 'NEW_CHANNEL',
+        payload: serialized_data
+      })
       # render json: @channel
     else
       render json: {error: 'Could not create that channel'}, status: 422

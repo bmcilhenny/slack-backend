@@ -1,5 +1,5 @@
 class Channel < ApplicationRecord
-  validates :name, uniqueness: true
+  # validates :name, uniqueness: true
 
   has_many :messages, dependent: :destroy
   has_many :user_channels

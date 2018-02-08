@@ -1,5 +1,5 @@
 class ChannelSerializer < ActiveModel::Serializer
-  attributes :id, :name, :details
+  attributes :id, :name, :details, :channel_type
 
   has_many :messages, serializer: ChannelMessageSerializer
   has_many :users, serializer: ChannelUserSerializer

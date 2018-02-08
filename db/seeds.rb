@@ -18,8 +18,8 @@ tim = User.create(username: 'tim@gmail.com', password: '123', display_name: 'Tim
 
 
 
-webDev1030 = Channel.create(name: 'Web Dev 10-30', details: 'something', owner: brendan)
-webDev1120 = Channel.create(name: 'Web Dev 11-20', details: 'We stink', owner: tim)
+webDev1030 = Channel.create(name: 'Web Dev 10-30', details: 'something', owner: brendan, channel_type: 'CHANNEL')
+webDev1120 = Channel.create(name: 'Web Dev 11-20', details: 'We stink', owner: tim, channel_type: 'CHANNEL')
 
 
 

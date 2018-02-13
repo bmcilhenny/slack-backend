@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
 
-  skip_before_action :authorized, only: [:index, :create, :show, :update_last_seen]
+  skip_before_action :authorized, only: [:index, :create, :show, :update_last_seen, :update]
 
   def index
     team = Team.find(params[:team_id])
@@ -11,7 +11,7 @@ class Api::V1::UsersController < ApplicationController
   def show
     team = Team.find(params[:team_id])
     @user = team.users.find(params[:id])
-    render json: @user, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user']
+    render json: @user, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user', 'team']
   end
 
   def update

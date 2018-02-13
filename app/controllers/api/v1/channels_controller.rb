@@ -3,20 +3,20 @@ class Api::V1::ChannelsController < ApplicationController
   skip_before_action :authorized, only: [:index, :create, :show]
 
   def index
-    @channels = Channel.all
+    team = Team.find(params[:team_id])
+    @channels = team.channels.all
     render json: @channels
   end
 
   def create
-    # if params[:details] === '' && params[:name] === '' params[:details] === ''
-    #   params[:details] = nil, params[:name] = nil, par
-    byebug
-    @channel = Channel.new(name: params[:name], owner_id: params[:owner_id], details: params[:details], channel_type: params[:channel_type])
+    # byebug
+    @channel = Channel.new(team_id: params[:team_id], name: params[:name], owner_id: params[:owner_id], details: params[:details], channel_type: params[:channel_type])
     if @channel.save
       users = params[:users]
       users.each do |u|
         user = User.find(u)
         user.channels << @channel
+        user.user_channels.last.update!(last_seen: DateTime.now)
       end
 
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
@@ -34,7 +34,8 @@ class Api::V1::ChannelsController < ApplicationController
   end
 
   def show
-    @channel = Channel.find(params[:id])
+    team = Team.find(params[:team_id])
+    @channel = team.channels.find(params[:id])
     render json: @channel
   end
 
@@ -50,12 +51,13 @@ class Api::V1::ChannelsController < ApplicationController
   end
 
   def destroy
-    @channel = Channel.find(params[:id])
+    team = Team.find(params[:team_id])
+    @channel = team.channels.find(params[:id])
     @channel.destroy
   end
 
   private
   def channel_params
-    params.permit(:name, :details, :owner_id, :users, :channel_type)
+    params.permit(:name, :details, :owner_id, :users, :channel_type, :team_id, :last_seen)
   end
 end

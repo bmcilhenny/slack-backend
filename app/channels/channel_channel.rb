@@ -4,6 +4,8 @@ class ChannelChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
+    user = User.find([params[:id]])
+    # user.user_channels.find_by(channel_id: [params[:channel_id]])
+    # UserChannel.find(user: user, channel: [params[:channel_id]])
   end
 end

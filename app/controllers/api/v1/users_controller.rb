@@ -8,12 +8,23 @@ class Api::V1::UsersController < ApplicationController
     render json: @users, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user']
   end
 
+  def create
+    @user = User.new(user_params)
+
+    if @user.save
+      render json: @user, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user', 'team']
+    else
+      render json: {error: 'Unable to save user'}, status: 406
+    end
+  end
+
   def show
     team = Team.find(params[:team_id])
     @user = team.users.find(params[:id])
     render json: @user, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user', 'team']
   end
 
+  # NOT BEING USED
   def update
     team = Team.find(params[:team_id])
     @user = team.users.find(params[:id])
@@ -27,7 +38,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update_last_seen
-    byebug
+    # byebug
     user = User.find(params[:user_id])
     user_channel = user.user_channels.find_by(channel_id: params[:channel_id])
     user_channel.update!(last_seen: DateTime.now)
@@ -35,6 +46,6 @@ class Api::V1::UsersController < ApplicationController
 
   private
   def user_params
-    params.permit(:username, :password, :display_name, :image_url, :team_id, :user_id, :channel_id)
+    params.permit(:username, :password, :password_confirmation, :display_name, :image_url, :team_id, :user_id, :channel_id)
   end
 end

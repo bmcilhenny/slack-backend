@@ -3,7 +3,7 @@ class UserSerializer < ActiveModel::Serializer
 
   has_many :channels
   has_many :owned_channels
-  has_many :messages
+  # has_many :messages
   belongs_to :team, serializer: TeamUsersSerializer
 
 end

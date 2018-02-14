@@ -1,4 +1,5 @@
 class ChannelSerializer < ActiveModel::Serializer
+
   attributes :id, :name, :details, :channel_type, :team_id, :readMessages, :unreadMessages
 
   # has_many :messages, serializer: ChannelMessageSerializer
@@ -7,7 +8,8 @@ class ChannelSerializer < ActiveModel::Serializer
 
 
   def readMessages
-    user_channel = UserChannel.find_by(channel_id: object.id, user_id: current_user.id)
+    # byebug
+    user_channel = UserChannel.find_by(channel_id: object.id, user_id: scope.id)
     readMessages = object.messages.select {|message| message.created_at < user_channel.last_seen  }
 
 

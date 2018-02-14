@@ -1,6 +1,6 @@
 class Api::V1::ChannelsController < ApplicationController
 
-  skip_before_action :authorized, only: [:index, :create, :show]
+  skip_before_action :authorized, only: [:index, :show, :create]
 
   def index
     team = Team.find(params[:team_id])
@@ -9,7 +9,6 @@ class Api::V1::ChannelsController < ApplicationController
   end
 
   def create
-    # byebug
     @channel = Channel.new(team_id: params[:team_id], name: params[:name], owner_id: params[:owner_id], details: params[:details], channel_type: params[:channel_type])
     if @channel.save
       users = params[:users]
@@ -20,7 +19,7 @@ class Api::V1::ChannelsController < ApplicationController
       end
 
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
-        ChannelSerializer.new(@channel)
+        ChannelForBroadcastSerializer.new(@channel)
       ).serializable_hash
 
       ActionCable.server.broadcast('my_channel', {

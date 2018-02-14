@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::API
+  # serialization_scope :view_context
+
   before_action :authorized
+  
  def issue_token(user)
     JWT.encode({user_id: user.id}, ENV['secret_key'], 'HS256')
   end

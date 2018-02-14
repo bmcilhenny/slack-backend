@@ -27,6 +27,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update_last_seen
+    byebug
     user = User.find(params[:user_id])
     user_channel = user.user_channels.find_by(channel_id: params[:channel_id])
     user_channel.update!(last_seen: DateTime.now)

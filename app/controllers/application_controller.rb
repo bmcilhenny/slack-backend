@@ -2,31 +2,39 @@ class ApplicationController < ActionController::API
   # serialization_scope :view_context
 
   before_action :authorized
-  
- def issue_token(user)
-    JWT.encode({user_id: user.id}, ENV['secret_key'], 'HS256')
+
+  def issue_token(user)
+    JWT.encode({user_id: user.id}, ENV['jwt_secret'], 'HS256')
   end
- def current_user
+
+  def current_user
     @user ||= User.find_by(id: user_id)
   end
- def token
-    request.headers['Authorization']
+
+  def user_id
+     decoded_token.first['user_id']
   end
- def decoded_token
+
+  def decoded_token
     begin
+      # byebug
       # [{user_id: 1}, {algo: 'hs256'}]
-      JWT.decode(token, ENV['secret_key'], true, { :algorithm => 'HS256' })
+      JWT.decode(token, ENV['jwt_secret'], true, { :algorithm => 'HS256' })
     rescue JWT::DecodeError
       [{}]
     end
   end
- def user_id
-    decoded_token.first['user_id']
+
+  def token
+    request.headers['Authorization']
   end
- def authorized
+
+  def authorized
     render json: {message: "Not welcome" }, status: 401 unless logged_in?
   end
- def logged_in?
+
+  def logged_in?
     !!current_user
   end
+
 end

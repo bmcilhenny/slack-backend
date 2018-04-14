@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::API
-  # serialization_scope :view_context
-
   before_action :authorized
 
   def issue_token(user)
@@ -18,7 +16,6 @@ class ApplicationController < ActionController::API
   def decoded_token
     begin
       # byebug
-      # [{user_id: 1}, {algo: 'hs256'}]
       JWT.decode(token, ENV['jwt_secret'], true, { :algorithm => 'HS256' })
     rescue JWT::DecodeError
       [{}]

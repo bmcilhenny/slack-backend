@@ -15,9 +15,9 @@ class Api::V1::AuthController < ApplicationController
       render json: {error: 'That user could not be found'}, status: 401
     end
   end
+
  def show
-    # token = request.headers['Authorization']
-    # user = User.find_by(id: token)
+    user = User.find_by(id: user_id)
     if logged_in?
       render json: { id: current_user.id, username: current_user.username, display_name: current_user.display_name, team: current_user.team }
     else

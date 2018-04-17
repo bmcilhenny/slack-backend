@@ -35,7 +35,9 @@ class ChannelChannel < ApplicationCable::Channel
     ActionCable.server.broadcast('my_channel', {
       type: "USER_OFFLINE",
       payload: serialized_data
-      })
+    })
+
+    stop_all_streams
 
   end
 end

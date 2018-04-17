@@ -14,6 +14,8 @@ class Api::V1::MessagesController < ApplicationController
         MessageSerializer.new(@message)
       ).serializable_hash
 
+      byebug
+
       ActionCable.server.broadcast('my_channel', {
         type: 'NEW_MESSAGE',
         payload: serialized_data

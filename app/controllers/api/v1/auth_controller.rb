@@ -1,27 +1,25 @@
 class Api::V1::AuthController < ApplicationController
  skip_before_action :authorized, only: [:create, :show]
+
  def create
     team = Team.find(params[:team_id])
     user = team.users.find_by(username: params[:username])
 
    if user && user.authenticate(params[:password])
-     # byebug
+
       # issue that user a token
       token = issue_token(user)
-      # byebug
       render json: {id: user.id, username: user.username, jwt: token, display_name: user.display_name, team: user.team}
     else
-
       render json: {error: 'That user could not be found'}, status: 401
     end
   end
 
  def show
-    user = User.find_by(id: user_id)
+    @user = User.find_by(id: user_id)
     if logged_in?
-      render json: { id: current_user.id, username: current_user.username, display_name: current_user.display_name, team: current_user.team }
+      render json: { id: @user.id, username: @user.username, display_name: @user.display_name, team: @user.team }
     else
-
       render json: {error: 'No user could be found'}, status: 401
     end
   end

@@ -1,5 +1,8 @@
 class Channel < ApplicationRecord
-  # validates :name, uniqueness: true
+  include SlugChannelNames
+  include ErrorHandling
+
+  validates :slug, uniqueness: true
 
   has_many :messages, dependent: :destroy
   has_many :user_channels
@@ -8,8 +11,8 @@ class Channel < ApplicationRecord
   belongs_to :team
   belongs_to :owner, :class_name => 'User'
 
-  # def users
-  #   byebug
-  #   self.users.uniq
-  # end
+  before_validation :save_slug
+
+  private
+
 end

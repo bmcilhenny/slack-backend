@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include ErrorHandling
   has_secure_password
 
   validates :username, presence: true
@@ -13,4 +14,12 @@ class User < ApplicationRecord
   # has_many :channels, through: :messages
   has_many :channels, through: :user_channels
   has_many :owned_channels, :class_name => 'Channel', :foreign_key => 'owner_id'
+
+  def channel_data_for_sidebar
+    self.channels.collect{ |channel| {name: channel.name, slug: channel.slug, message_count: channel.messages.length } }
+  end
+
+  def channel_slugs
+  end
+
 end

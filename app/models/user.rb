@@ -15,7 +15,7 @@ class User < ApplicationRecord
   has_many :channels, through: :user_channels
   has_many :owned_channels, :class_name => 'Channel', :foreign_key => 'owner_id'
 
-  def channel_data_for_sidebar
+  def channel_data_for_channel_list
     self.channels.collect{ |channel| {name: channel.name, slug: channel.slug, message_count: channel.messages.length } }
   end
 

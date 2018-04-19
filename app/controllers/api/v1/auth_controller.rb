@@ -18,7 +18,7 @@ class Api::V1::AuthController < ApplicationController
  def show
     @user = User.find_by(id: user_id)
     if logged_in?
-      render json: { id: @user.id, username: @user.username, display_name: @user.display_name, team: @user.team }
+      render json: { id: @user.id, username: @user.username, display_name: @user.display_name, team: @user.team, channel_list_data: channel_data_for_channel_list }
     else
       render json: {error: 'No user could be found'}, status: 401
     end

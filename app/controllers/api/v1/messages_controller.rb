@@ -16,7 +16,7 @@ class Api::V1::MessagesController < ApplicationController
 
       # byebug
 
-      ActionCable.server.broadcast('my_channel', {
+      ActionCable.server.broadcast("channel_#{message.channel.id}", {
         type: 'NEW_MESSAGE',
         payload: serialized_data
       })

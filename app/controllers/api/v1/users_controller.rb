@@ -1,5 +1,4 @@
 class Api::V1::UsersController < ApplicationController
-
   skip_before_action :authorized, only: [:index, :create, :show, :update_last_seen, :update]
 
   def index

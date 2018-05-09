@@ -13,6 +13,4 @@ class Channel < ApplicationRecord
 
   before_validation :save_slug
 
-  private
-
 end

@@ -9,17 +9,22 @@ class Api::V1::MessagesController < ApplicationController
 
   def create
     @message = Message.new(content: params[:content], user_id: params[:user_id], channel_id: params[:channel_id])
+    @channel = Channel.find(params[:channel_id])
     if @message.save
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
         MessageSerializer.new(@message)
       ).serializable_hash
 
       # byebug
-
-      ActionCable.server.broadcast("channel_#{message.channel.id}", {
+      MessagesChannel.broadcast_to @channel, {
         type: 'NEW_MESSAGE',
         payload: serialized_data
-      })
+      }
+      head :ok
+      # ActionCable.server.broadcast("channel_#{message.channel.id}", {
+      #   type: 'NEW_MESSAGE',
+      #   payload: serialized_data
+      # })
       # render json: @message
     else
       render json: {error: 'Could not create that message'}, status: 422

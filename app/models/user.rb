@@ -24,8 +24,13 @@ class User < ApplicationRecord
     last_seen_channel_dup = self.user_channels.sort{ |a, b| a[:last_seen] <=> b[:last_seen]}.last.as_json
     last_seen_channel_slug_data_dup = self.user_channels.sort{ |a, b| a[:last_seen] <=> b[:last_seen]}.last.channel.slug.as_json
     last_seen_channel_messages_dup = self.user_channels.sort{ |a, b| a[:last_seen] <=> b[:last_seen]}.last.channel.messages.as_json
+
+    last_seen_channel_messages_dup = self.user_channels.sort{ |a, b| a[:last_seen] <=> b[:last_seen]}.last.channel.messages.collect{ |message| MessageSerializer.new(message)}.as_json
+
+    last_seen_channel_name_dup = self.user_channels.sort{ |a, b| a[:last_seen] <=> b[:last_seen]}.last.channel.name.as_json
     last_seen_channel_dup[:slug] = last_seen_channel_slug_data_dup
     last_seen_channel_dup[:messages] = last_seen_channel_messages_dup
+    last_seen_channel_dup[:name] = last_seen_channel_name_dup
     last_seen_channel_dup
   end
 

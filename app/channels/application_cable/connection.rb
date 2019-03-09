@@ -7,7 +7,6 @@ module ApplicationCable
     end
 
     def current_user
-      # byebug
       @user ||= User.find_by(id: user_id)
     end
 
@@ -17,8 +16,6 @@ module ApplicationCable
 
     def decoded_token
       begin
-        byebug
-        # [{user_id: 1}, {algo: 'hs256'}]
         JWT.decode(token, ENV['jwt_secret'], true, { :algorithm => 'HS256' })
       rescue JWT::DecodeError
         [{}]

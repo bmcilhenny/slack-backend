@@ -4,10 +4,10 @@ class Api::V1::AuthController < ApplicationController
  def create
     team = Team.find(params[:team_id])
     user = team.users.find_by(username: params[:username])
-
-   if user && user.authenticate(params[:password])
-
+    
+    if user && user.authenticate(params[:password])
       # issue that user a token
+      byebug
       token = issue_token(user)
       render json: {id: user.id, username: user.username, jwt: token, display_name: user.display_name, team: user.team}
     else
@@ -17,6 +17,7 @@ class Api::V1::AuthController < ApplicationController
 
  def show
     @user = User.find_by(id: user_id)
+    byebug
     if logged_in?
       render json: { id: @user.id, username: @user.username, display_name: @user.display_name, team: @user.team, last_seen_channel: @user.last_seen_channel}
     else

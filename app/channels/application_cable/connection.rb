@@ -17,7 +17,7 @@ module ApplicationCable
 
     def decoded_token
       begin
-        # byebug
+        byebug
         # [{user_id: 1}, {algo: 'hs256'}]
         JWT.decode(token, ENV['jwt_secret'], true, { :algorithm => 'HS256' })
       rescue JWT::DecodeError

@@ -15,11 +15,10 @@ class Api::V1::AuthController < ApplicationController
     end
   end
 
+  # add user has many teams, team has many users relationship
  def show
-    @user = User.find_by(id: user_id)
-    byebug
     if logged_in?
-      render json: { id: @user.id, username: @user.username, display_name: @user.display_name, team: @user.team, last_seen_channel: @user.last_seen_channel}
+      render json: { id: current_user.id, username: current_user.username, display_name: current_user.display_name, team: current_user.team, last_seen_channel: current_user.last_seen_channel}
     else
       render json: {error: 'No user could be found'}, status: 401
     end

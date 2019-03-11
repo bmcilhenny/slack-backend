@@ -7,7 +7,6 @@ class Api::V1::AuthController < ApplicationController
     
     if user && user.authenticate(params[:password])
       # issue that user a token
-      byebug
       token = issue_token(user)
       render json: {id: user.id, username: user.username, jwt: token, display_name: user.display_name, team: user.team}
     else

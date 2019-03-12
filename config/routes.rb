@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :teams, only: [:show, :index, :create, :update] do
-        resources :users, only: [:show, :create, :update]
+        resources :users, only: [:show, :index, :create, :update]
         resources :messages, only: [:index, :create]
         resources :channels
         post '/login', to: 'auth#create'

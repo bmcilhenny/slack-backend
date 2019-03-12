@@ -3,8 +3,8 @@ class Api::V1::UsersController < ApplicationController
 
   def index
     team = Team.find(params[:team_id])
-    @users = team.users.all
-    render json: @users, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user']
+    @teammates = team.users.reject{|teammate| current_user.id == teammate.id }
+    render json: @teammates #, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user']
   end
 
   def create

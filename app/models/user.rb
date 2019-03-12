@@ -20,6 +20,7 @@ class User < ApplicationRecord
     self.channels.collect{ |channel| {name: channel.name, slug: channel.slug, message_count: channel.messages.length } }
   end
 
+  # redo serializer for channel to show messages
   def last_seen_channel
     last_channel_obj = Hash.new
     sorted_channels = self.user_channels.sort{ |a, b| a[:last_seen] <=> b[:last_seen]}
@@ -28,10 +29,7 @@ class User < ApplicationRecord
       last_channel_obj[:messages] = Array.new
     else
       byebug
-      last_channel = sorted_channels.last
-      last_channel_obj[:slug] = last_channel.slug
-      last_channel_obj[:messages] = last_channel.messages
-      last_channel_obj[:name] = last_channel.name
+      last_channel = sorted_channels.last.channel
     end
     last_channel_obj
   end

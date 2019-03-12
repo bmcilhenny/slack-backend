@@ -7,7 +7,6 @@ module SlugChannelNames
 
   def generate_dm_channel_name
     dm_user_names = self.users.collect{|user| user.display_name}
-    dm_user_names.downcase.strip..gsub(/[^0-9a-z]/i, '%20')
   end
 
   def save_slug

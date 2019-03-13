@@ -20,7 +20,6 @@ class Api::V1::UsersController < ApplicationController
   def show
     team = Team.find(params[:team_id])
     @user = team.users.find(params[:id])
-    # byebug
     render json: @user, include: ['channels', 'channels.users', 'channels.messages', 'channels.messages.user', 'team']
   end
 

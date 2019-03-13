@@ -22,16 +22,15 @@ class User < ApplicationRecord
 
   # redo serializer for channel to show messages
   def last_seen_channel
-    last_channel_obj = Hash.new
+    last_channel = Object.new
     sorted_channels = self.user_channels.sort{ |a, b| a[:last_seen] <=> b[:last_seen]}
     if sorted_channels.blank?
-      last_channel_obj[:slug] = last_channel_obj[:name] = ""
-      last_channel_obj[:messages] = Array.new
+      last_channel[:slug] = last_channel_obj[:name] = ""
+      last_channel[:messages] = Array.new
     else
-      byebug
       last_channel = sorted_channels.last.channel
     end
-    last_channel_obj
+    last_channel
   end
 
 end

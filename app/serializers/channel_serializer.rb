@@ -1,8 +1,8 @@
 class ChannelSerializer < ActiveModel::Serializer
 
-  attributes :id, :name, :details, :channel_type, :team_id, :readMessages, :unreadMessages
+  attributes :id, :name, :details, :channel_type, :team_id, :readMessages, :unreadMessages, :slug
 
-  # has_many :messages, serializer: ChannelMessageSerializer
+  has_many :messages, serializer: ChannelMessageSerializer
   has_many :users, serializer: ChannelUserSerializer
   belongs_to :owner, serializer: OwnerSerializer
 
